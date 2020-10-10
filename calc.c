@@ -90,7 +90,7 @@ typedef void (*pcc_action_t)(calc_context_t *, pcc_thunk_t *, pcc_value_t *);
 
 typedef enum pcc_thunk_type_tag {
     PCC_THUNK_LEAF,
-    PCC_THUNK_NODE,
+    PCC_THUNK_NODE
 } pcc_thunk_type_t;
 
 typedef struct pcc_thunk_leaf_tag {
@@ -132,7 +132,7 @@ typedef struct pcc_lr_entry_tag pcc_lr_entry_t;
 
 typedef enum pcc_lr_answer_type_tag {
     PCC_LR_ANSWER_LR,
-    PCC_LR_ANSWER_CHUNK,
+    PCC_LR_ANSWER_CHUNK
 } pcc_lr_answer_type_t;
 
 typedef union pcc_lr_answer_data_tag {
@@ -1555,14 +1555,12 @@ static pcc_thunk_chunk_t *pcc_evaluate_rule_EOL(calc_context_t *ctx) {
     L0002:;
         ctx->pos = p;
         pcc_thunk_array__revert(ctx->auxil, &chunk->thunks, n);
-        {
-            if (
-                pcc_refill_buffer(ctx, 2) < 2 ||
-                (ctx->buffer.buf + ctx->pos)[0] != '\r' ||
-                (ctx->buffer.buf + ctx->pos)[1] != '\n'
-            ) goto L0003;
-            ctx->pos += 2;
-        }
+        if (
+            pcc_refill_buffer(ctx, 2) < 2 ||
+            (ctx->buffer.buf + ctx->pos)[0] != '\r' ||
+            (ctx->buffer.buf + ctx->pos)[1] != '\n'
+        ) goto L0003;
+        ctx->pos += 2;
         goto L0001;
     L0003:;
         ctx->pos = p;
